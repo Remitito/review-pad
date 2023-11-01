@@ -12,8 +12,7 @@ body {
   width: 100vw;
 }
 
-button,
-a {
+button {
   @apply text-white bg-blue-600 hover:bg-blue-800 text-xl p-2 rounded-lg mx-5;
 }
 

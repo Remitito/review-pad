@@ -7,7 +7,6 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
-    console.log(body);
     await Notepad.create(body);
 
     return NextResponse.json({ message: "Notepad Created" }, { status: 201 });

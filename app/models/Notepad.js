@@ -11,6 +11,7 @@ const NoteSchema = new Schema({
 const NotepadSchema = new Schema({
   name: String,
   notes: [NoteSchema],
+  padId: Number,
   passcode: Number,
 });
 
