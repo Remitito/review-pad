@@ -1,17 +1,41 @@
 "use client";
-
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Find = () => {
   const [padId, setPadId] = useState("");
   const [passcode, setPasscode] = useState("");
+  const router = useRouter();
+
+  const passcodeCheck = async () => {
+    if (padId.length == 8 && passcode.length == 6) {
+      try {
+        const response = await fetch("/api/load", {
+          method: "POST",
+          body: JSON.stringify({
+            padId: padId,
+            passcode: passcode,
+          }),
+        });
+        if (response.ok) {
+          router.push(`/Load/${padId}`);
+        } else {
+          // Password was wrong
+        }
+      } catch (error) {
+        console.error("There was an error:", error);
+      }
+    } else {
+      // Input error
+    }
+  };
 
   return (
     <>
       <div>
         <div className="mb-4">
-          <label for="padId">Notepad ID</label>
+          <label>Notepad ID</label>
           <input
             id="padId"
             type="text"
@@ -20,8 +44,8 @@ const Find = () => {
             onChange={(e) => setPadId(e.target.value)}
           />
         </div>
-        <div class="mb-4">
-          <label for="passcode">Passcode</label>
+        <div className="mb-4">
+          <label>Passcode</label>
           <input
             id="passcode"
             type="password"
@@ -36,9 +60,9 @@ const Find = () => {
             }}
           />
         </div>
-        <Link href={`/Load/${padId}`}>
-          <button onClick={() => createNotepad()}>Load Notepad</button>
-        </Link>
+        {/* <Link href={`/Load/${padId}`}> */}
+        <button onClick={() => passcodeCheck()}>Load Notepad</button>
+        {/* </Link> */}
       </div>
     </>
   );

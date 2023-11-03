@@ -11,7 +11,7 @@ const Create = () => {
 
   const createNotepad = async () => {
     try {
-      const response = await fetch("/api/notepad", {
+      const response = await fetch("/api/create", {
         method: "POST",
         body: JSON.stringify({
           name: name,
