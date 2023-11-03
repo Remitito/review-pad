@@ -1,23 +1,28 @@
-const loadNotepad = async (padId) => {
-  if (padId) {
-    try {
-      const response = await fetch(`http://localhost:3000/api/load/${padId}`);
-      return response.json();
-    } catch (error) {
-      console.error("There was an error:", error);
-    }
-  }
-};
+"use client";
 
-const Load = async ({ params }) => {
-  const padId = params.id;
-  const padData = await loadNotepad(padId);
-  const notepad = padData.notepad;
+import { useState, useEffect } from "react";
+
+const Load = ({ params }) => {
+  const [notepad, setNotepad] = useState();
+
+  useEffect(() => {
+    const padId = params.id;
+    fetch(`http://localhost:3000/api/load/${padId}`)
+      .then((res) => res.json())
+      .then((data) => setNotepad(data.notepad));
+  }, []);
 
   return (
-    <div>
-      <h1>{notepad.name}</h1>
-    </div>
+    <>
+      {notepad ? (
+        <div>
+          <h1>{notepad.name}</h1>
+          <button onClick={() => console.log("hello")}>Hi</button>
+        </div>
+      ) : (
+        <div>Nah</div>
+      )}
+    </>
   );
 };
 
