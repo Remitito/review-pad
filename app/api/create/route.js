@@ -7,11 +7,29 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
+
+    const initialNote = {
+      content: "Notepad created!",
+      date: new Date(),
+    };
+
+    body.notes = body.notes ? [...body.notes, initialNote] : [initialNote];
+
     await Notepad.create(body);
 
-    return NextResponse.json({ message: "Notepad Created" }, { status: 201 });
+    return new NextResponse(JSON.stringify({ message: "Notepad Created" }), {
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ message: "Error", err }, { status: 500 });
+    return new NextResponse(JSON.stringify({ message: "Error", err }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 }

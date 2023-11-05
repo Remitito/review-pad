@@ -27,7 +27,7 @@ const Load = ({ params }) => {
     <>
       {notepad ? (
         <div>
-          <Notepad notepad={notepad.notepad} />
+          <Notepad notepad={notepad} />
         </div>
       ) : (
         <div>
@@ -55,7 +55,7 @@ const Load = ({ params }) => {
               }}
             />
           </div>
-          <button onClick={() => loadNotepad()}>Hi</button>
+          <button onClick={() => loadNotepad()}>Open Notepad</button>
         </div>
       )}
     </>

@@ -35,9 +35,7 @@ const Find = () => {
             }}
           />
         </div>
-        {/* <Link href={`/Load/${padId}`}> */}
-        <button onClick={() => passcodeCheck()}>Load Notepad</button>
-        {/* </Link> */}
+        <button>Load Notepad</button>
       </div>
     </>
   );
