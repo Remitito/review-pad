@@ -2,16 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
-  margin: 0;
-  text-align: center;
-  width: 100vw;
-}
-
 button {
   @apply text-white bg-blue-600 hover:bg-blue-800 text-xl p-2 rounded-lg mx-5;
 }

@@ -1,35 +1,10 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Find = () => {
   const [padId, setPadId] = useState("");
   const [passcode, setPasscode] = useState("");
-  const router = useRouter();
-
-  const passcodeCheck = async () => {
-    if (padId.length == 8 && passcode.length == 6) {
-      try {
-        const response = await fetch("/api/load", {
-          method: "POST",
-          body: JSON.stringify({
-            padId: padId,
-            passcode: passcode,
-          }),
-        });
-        if (response.ok) {
-          router.push(`/Load/${padId}`);
-        } else {
-          // Password was wrong
-        }
-      } catch (error) {
-        console.error("There was an error:", error);
-      }
-    } else {
-      // Input error
-    }
-  };
 
   return (
     <>
