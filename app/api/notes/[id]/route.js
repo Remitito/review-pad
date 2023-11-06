@@ -36,15 +36,7 @@ export async function GET(request, { params }) {
         return new NextResponse(null, { status: 204 });
       }
     } else {
-      return new NextResponse(
-        JSON.stringify({ message: "Notepad not found." }),
-        {
-          status: 404,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      return new NextResponse(null, { status: 204 });
     }
   } catch (err) {
     console.error("Error fetching today's notes for padId", padId, err);
@@ -64,13 +56,11 @@ export async function POST(req, { params }) {
   await dbConnect();
   const body = await req.json();
 
-  const newNote = {
-    content: body.content,
-    date: new Date(),
-  };
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   try {
-    const notepad = await Notepad.findById(params.id);
+    const notepad = await Notepad.findOne({ padId: params.id });
 
     if (!notepad) {
       return new NextResponse(
@@ -84,22 +74,40 @@ export async function POST(req, { params }) {
       );
     }
 
-    notepad.notes.push(newNote);
+    let todaysNote = notepad.notes.find((note) => {
+      const noteDate = new Date(note.date);
+      noteDate.setHours(0, 0, 0, 0);
+      return noteDate.getTime() === today.getTime();
+    });
+
+    if (todaysNote) {
+      todaysNote.content = body.content;
+    } else {
+      todaysNote = {
+        content: body.content,
+        date: new Date(),
+      };
+      notepad.notes.push(todaysNote);
+    }
 
     await notepad.save();
 
     return new NextResponse(
-      JSON.stringify({ message: "Notes added successfully" }),
+      JSON.stringify({ message: "Note updated successfully" }),
       {
-        status: 201,
+        status: 200,
         headers: {
           "Content-Type": "application/json",
         },
       }
     );
   } catch (err) {
+    console.error("Server Error:", err.stack);
     return new NextResponse(
-      JSON.stringify({ message: "Error processing your request", err }),
+      JSON.stringify({
+        message: "Error processing your request",
+        error: err.message,
+      }),
       {
         status: 500,
         headers: {

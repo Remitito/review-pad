@@ -11,12 +11,14 @@ const Notepad = (notepad) => {
           `http://localhost:3000/api/notes/${notepad.notepad.padId}`
         );
 
+        if (response.status === 204) {
+          return null;
+        }
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-
         const data = await response.json();
-
         setNotes(data[0].content);
       } catch (error) {
         console.error("Failed to fetch notes:", error);
@@ -36,14 +38,12 @@ const Notepad = (notepad) => {
         content: notes,
       }),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
-        console.log("Saved notes:", data);
+        if (data.error) {
+          throw new Error(data.message);
+        }
+        console.log("Note saved:", data.message);
       })
       .catch((error) => {
         console.error("Failed to save notes:", error);
@@ -59,7 +59,10 @@ const Notepad = (notepad) => {
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           className="my-6"
-        ></textarea>
+          placeholder={
+            notes.length > 0 ? "" : "Write your first note for today..."
+          }
+        />
         <button onClick={() => saveNotes()}>Save Notes</button>
       </div>
     </>
