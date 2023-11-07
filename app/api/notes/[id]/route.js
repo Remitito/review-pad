@@ -93,7 +93,7 @@ export async function POST(req, { params }) {
     await notepad.save();
 
     return new NextResponse(
-      JSON.stringify({ message: "Note updated successfully" }),
+      JSON.stringify({ message: "Notes updated successfully" }),
       {
         status: 200,
         headers: {

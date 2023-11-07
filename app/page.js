@@ -7,7 +7,7 @@ export default function Home() {
         <p className="text-xl">A notepad organised for quick reviews</p>
       </div>
       <div className="mt-7 flex flex-row place-content-center">
-        <Link href="/Find">
+        <Link href="/Load/find">
           <button>Existing Notepad</button>
         </Link>
         <Link href="/Create">

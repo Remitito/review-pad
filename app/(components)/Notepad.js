@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import Loading from "./Loading";
 
 const Notepad = (notepad) => {
   const [day, setDay] = useState("Today's");
   const [notes, setNotes] = useState("");
+  const [oldNotes, setOldNotes] = useState("");
+  const [notesFetched, setNotesFetched] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -20,6 +24,8 @@ const Notepad = (notepad) => {
         }
         const data = await response.json();
         setNotes(data[0].content);
+        setOldNotes(data[0].content);
+        setNotesFetched(true);
       } catch (error) {
         console.error("Failed to fetch notes:", error);
       }
@@ -29,6 +35,10 @@ const Notepad = (notepad) => {
   }, [notepad.notepad.padId]);
 
   const saveNotes = () => {
+    if (notes === oldNotes) {
+      setMessage("Notes already saved");
+      return;
+    }
     fetch(`http://localhost:3000/api/notes/${notepad.notepad.padId}`, {
       method: "POST",
       headers: {
@@ -43,7 +53,8 @@ const Notepad = (notepad) => {
         if (data.error) {
           throw new Error(data.message);
         }
-        console.log("Note saved:", data.message);
+        setMessage(data.message);
+        setOldNotes(notes);
       })
       .catch((error) => {
         console.error("Failed to save notes:", error);
@@ -52,19 +63,34 @@ const Notepad = (notepad) => {
 
   return (
     <>
-      <div>{notepad.notepad.name}</div>
-      <div className="flex flex-col items-center my-8">
-        <h3> {day} notes</h3>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          className="my-6"
-          placeholder={
-            notes.length > 0 ? "" : "Write your first note for today..."
-          }
-        />
-        <button onClick={() => saveNotes()}>Save Notes</button>
-      </div>
+      {!notesFetched ? (
+        <Loading />
+      ) : (
+        <>
+          <div>{notepad.notepad.name}</div>
+          <div className="flex flex-col items-center my-8">
+            <h3> {day} notes</h3>
+            <textarea
+              value={notes}
+              onChange={(e) => {
+                setNotes(e.target.value);
+                setMessage("");
+              }}
+              className="my-6"
+              placeholder={
+                notes.length > 0 ? "" : "Write your first note for today..."
+              }
+            />
+            <>
+              {message.length === 0 ? (
+                <button onClick={() => saveNotes()}>Save Notes</button>
+              ) : (
+                <label className="bg-green-100 text-green-700">{message}</label>
+              )}
+            </>
+          </div>
+        </>
+      )}
     </>
   );
 };
