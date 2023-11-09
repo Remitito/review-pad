@@ -43,7 +43,6 @@ const Load = ({ params }) => {
               <div className="mb-4">
                 <label>Pad ID</label>
                 <input
-                  disabled={idAsParam}
                   placeholder="E.g. 26515812"
                   value={padId}
                   onChange={(e) => setPadId(e.target.value)}

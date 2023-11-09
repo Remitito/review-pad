@@ -4,15 +4,20 @@ import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   await dbConnect();
+  const padId = params.id.substring(0, 8);
+  const queryDate = params.id.substring(8);
 
-  const startOfDay = new Date();
+  // Ensure that the date is at the start of the day
+  const startOfDay = new Date(queryDate);
   startOfDay.setHours(0, 0, 0, 0);
-  const endOfDay = new Date();
+
+  // Ensure that the date is at the end of the day
+  const endOfDay = new Date(queryDate);
   endOfDay.setHours(23, 59, 59, 999);
 
   try {
     const notepad = await Notepad.findOne({
-      padId: params.id,
+      padId: padId,
       "notes.date": {
         $gte: startOfDay,
         $lte: endOfDay,
@@ -20,13 +25,14 @@ export async function GET(request, { params }) {
     });
 
     if (notepad) {
-      const todaysNotes = notepad.notes.filter((note) => {
+      // Filter for notes within the date range
+      const notesForDate = notepad.notes.filter((note) => {
         const noteDate = new Date(note.date);
         return noteDate >= startOfDay && noteDate <= endOfDay;
       });
 
-      if (todaysNotes.length > 0) {
-        return new NextResponse(JSON.stringify(todaysNotes), {
+      if (notesForDate.length > 0) {
+        return new NextResponse(JSON.stringify(notesForDate), {
           status: 200,
           headers: {
             "Content-Type": "application/json",
@@ -39,7 +45,7 @@ export async function GET(request, { params }) {
       return new NextResponse(null, { status: 204 });
     }
   } catch (err) {
-    console.error("Error fetching today's notes for padId", padId, err);
+    console.error("Error fetching notes for padId", params.id, err);
     return new NextResponse(
       JSON.stringify({ message: "Internal Server Error", error: err }),
       {
