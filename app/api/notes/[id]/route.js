@@ -7,13 +7,8 @@ export async function GET(request, { params }) {
   const padId = params.id.substring(0, 8);
   const queryDate = params.id.substring(8);
 
-  // Ensure that the date is at the start of the day
-  const startOfDay = new Date(queryDate);
-  startOfDay.setHours(0, 0, 0, 0);
-
-  // Ensure that the date is at the end of the day
-  const endOfDay = new Date(queryDate);
-  endOfDay.setHours(23, 59, 59, 999);
+  const startOfDay = new Date(queryDate).setHours(0, 0, 0, 0);
+  const endOfDay = new Date(queryDate).setHours(23, 59, 59, 999);
 
   try {
     const notepad = await Notepad.findOne({
@@ -25,7 +20,6 @@ export async function GET(request, { params }) {
     });
 
     if (notepad) {
-      // Filter for notes within the date range
       const notesForDate = notepad.notes.filter((note) => {
         const noteDate = new Date(note.date);
         return noteDate >= startOfDay && noteDate <= endOfDay;

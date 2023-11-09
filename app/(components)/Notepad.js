@@ -28,23 +28,8 @@ const Notepad = (notepad) => {
         }
 
         if (!response.ok) {
-          // Attempt to get the error message from the response body
-          const errorBody = await response.text(); // Using .text() to handle non-JSON responses as well
-          let errorInfo;
-          try {
-            // Try to parse it as JSON if the error response is JSON
-            const parsedBody = JSON.parse(errorBody);
-            // Assuming the API returns an error in a consistent format, for example:
-            // { error: "Detailed error message" }
-            errorInfo = parsedBody.error || parsedBody.message;
-          } catch (e) {
-            // If it's not JSON or not in the expected format, use the raw text
-            errorInfo = errorBody;
-          }
-
-          // Construct a detailed error message
           throw new Error(
-            `Network response was not ok (Status: ${response.status} ${response.statusText}). Error: ${errorInfo}`
+            `Network response was not ok (Status: ${response.status} ${response.statusText})`
           );
         }
         const data = await response.json();
@@ -98,13 +83,15 @@ const Notepad = (notepad) => {
         <Loading />
       ) : (
         <>
-          <div>{notepad.notepad.name}</div>
-          <div className="flex flex-col items-center my-8">
-            <div>
-              <DatePicker
-                selected={date}
-                onChange={(date) => handleDateChange(date)}
-              />
+          <div className="flex flex-col items-center">
+            <div className="flex flex-row justify-around items-center">
+              <label style={{ width: "50%" }}>{notepad.notepad.name}</label>
+              <div style={{ width: "40%" }}>
+                <DatePicker
+                  selected={date}
+                  onChange={(date) => handleDateChange(date)}
+                />
+              </div>
             </div>
             <textarea
               value={notes}
@@ -112,7 +99,8 @@ const Notepad = (notepad) => {
                 setNotes(e.target.value);
                 setMessage("");
               }}
-              className="my-6"
+              style={{ height: "60vh" }}
+              className="my-6 w-3/5"
               placeholder={
                 oldNotes.length > 0
                   ? ""
