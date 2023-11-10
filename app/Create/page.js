@@ -30,7 +30,7 @@ const Create = () => {
         <label>{padId}</label>
       ) : (
         <div>
-          <div class="mb-4">
+          <div className="mb-4">
             <label for="name">Notepad Name</label>
             <input
               id="name"
@@ -40,7 +40,7 @@ const Create = () => {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          <div class="mb-4">
+          <div className="mb-4">
             <label for="passcode">Passcode</label>
             <input
               id="passcode"

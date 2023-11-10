@@ -6,10 +6,11 @@ import Loading from "@/app/(components)/Loading";
 
 const Load = ({ params }) => {
   const [notepad, setNotepad] = useState();
-  const [padId, setPadId] = useState();
+  const [padId, setPadId] = useState("");
   const [idAsParam, setIdAsParam] = useState(false);
-  const [passcode, setPasscode] = useState();
+  const [passcode, setPasscode] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (params.id !== "find" && params.id.length == 8) {
@@ -20,6 +21,14 @@ const Load = ({ params }) => {
   }, []);
 
   const loadNotepad = () => {
+    if (padId.length !== 8) {
+      setMessage("Please enter your notepad's 8-digit ID");
+      return;
+    }
+    if (passcode.length !== 6) {
+      setMessage("Please enter your notepad's 6-digit passcode");
+      return;
+    }
     fetch(`http://localhost:3000/api/load/${padId}`, {
       method: "POST",
       body: JSON.stringify({
@@ -45,7 +54,10 @@ const Load = ({ params }) => {
                 <input
                   placeholder="E.g. 26515812"
                   value={padId}
-                  onChange={(e) => setPadId(e.target.value)}
+                  onChange={(e) => {
+                    setPadId(e.target.value);
+                    setMessage("");
+                  }}
                 />
               </div>
               <div className="mb-4">
@@ -60,11 +72,18 @@ const Load = ({ params }) => {
                   onChange={(e) => {
                     if (e.target.value.match(/^\d*$/)) {
                       setPasscode(e.target.value);
+                      setMessage("");
                     }
                   }}
                 />
               </div>
-              <button onClick={() => loadNotepad()}>Open Notepad</button>
+              <>
+                {message.length > 0 ? (
+                  <label>{message}</label>
+                ) : (
+                  <button onClick={() => loadNotepad()}>Open Notepad</button>
+                )}
+              </>
             </div>
           )}
         </>
