@@ -29,12 +29,15 @@ const Load = ({ params }) => {
       setMessage("Please enter your notepad's 6-digit passcode");
       return;
     }
-    fetch(`http://localhost:3000/api/load/${padId}`, {
-      method: "POST",
-      body: JSON.stringify({
-        passcode: passcode,
-      }),
-    })
+    fetch(
+      `https://review-e7t3l1733-remititos-projects.vercel.app/api/load/${padId}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          passcode: passcode,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => setNotepad(data.notepad));
   };

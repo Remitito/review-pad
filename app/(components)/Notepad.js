@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Link from "next/link";
 
 const Notepad = (notepad) => {
   const [notes, setNotes] = useState("");
@@ -18,7 +17,7 @@ const Notepad = (notepad) => {
       const formattedDate = date.toISOString().split("T")[0];
       try {
         const response = await fetch(
-          `http://localhost:3000/api/notes/${
+          `https://review-e7t3l1733-remititos-projects.vercel.app/api/notes/${
             notepad.notepad.padId + formattedDate
           }`
         );
@@ -58,15 +57,18 @@ const Notepad = (notepad) => {
       setMessage("Notes already saved");
       return;
     }
-    fetch(`http://localhost:3000/api/notes/${notepad.notepad.padId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: notes,
-      }),
-    })
+    fetch(
+      `https://review-e7t3l1733-remititos-projects.vercel.app/api/notes/${notepad.notepad.padId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: notes,
+        }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
