@@ -8,7 +8,7 @@ const nextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://review-e7t3l1733-remititos-projects.vercel.app/",
+            value: "https://review-pad.vercel.app/",
           },
           {
             key: "Access-Control-Allow-Methods",

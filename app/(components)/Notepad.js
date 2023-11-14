@@ -17,7 +17,7 @@ const Notepad = (notepad) => {
       const formattedDate = date.toISOString().split("T")[0];
       try {
         const response = await fetch(
-          `https://review-e7t3l1733-remititos-projects.vercel.app/api/notes/${
+          `https://review-pad.vercel.app/api/notes/${
             notepad.notepad.padId + formattedDate
           }`
         );
@@ -57,18 +57,15 @@ const Notepad = (notepad) => {
       setMessage("Notes already saved");
       return;
     }
-    fetch(
-      `https://review-e7t3l1733-remititos-projects.vercel.app/api/notes/${notepad.notepad.padId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content: notes,
-        }),
-      }
-    )
+    fetch(`https://review-pad.vercel.app/api/notes/${notepad.notepad.padId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: notes,
+      }),
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
