@@ -77,13 +77,13 @@ const Load = ({ params }) => {
                   }}
                 />
               </div>
-              <>
+              <div>
                 {message.length > 0 ? (
                   <label>{message}</label>
                 ) : (
                   <button onClick={() => loadNotepad()}>Open Notepad</button>
                 )}
-              </>
+              </div>
             </div>
           )}
         </>

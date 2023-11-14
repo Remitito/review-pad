@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Link from "next/link";
 
 const Notepad = (notepad) => {
   const [notes, setNotes] = useState("");
   const [oldNotes, setOldNotes] = useState("");
   const [notesFetched, setNotesFetched] = useState(false);
   const [message, setMessage] = useState("");
+  const [notepadId, setNotepadId] = useState("");
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
@@ -24,6 +26,7 @@ const Notepad = (notepad) => {
         if (response.status === 204) {
           setNotesFetched(true);
           setOldNotes("");
+          setNotepadId(notepad.notepad.padId);
           return null;
         }
 
@@ -86,7 +89,7 @@ const Notepad = (notepad) => {
           <div className="flex flex-col items-center">
             <div className="flex flex-row justify-around items-center">
               <label style={{ width: "50%" }}>{notepad.notepad.name}</label>
-              <div style={{ width: "40%" }}>
+              <div style={{ width: "50%" }}>
                 <DatePicker
                   selected={date}
                   onChange={(date) => handleDateChange(date)}
@@ -99,8 +102,8 @@ const Notepad = (notepad) => {
                 setNotes(e.target.value);
                 setMessage("");
               }}
-              style={{ height: "60vh" }}
-              className="my-6 w-3/5"
+              style={{ height: "50vh" }}
+              className="my-6 w-4/5"
               placeholder={
                 oldNotes.length > 0
                   ? ""
